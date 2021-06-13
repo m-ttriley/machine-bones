@@ -15,13 +15,14 @@ float random (vec2 st) {
                        vec2(12.9898,78.233)))*
       43758.5453123);
 }
+
 void main() {
   mat4 rXPos = mat4(vec4(1.0,0.0,0.0,0.0), vec4(0.0,cos(rotationX),-sin(rotationX),0.0), vec4(0.0,sin(rotationX),cos(rotationX),0.0), vec4(0.0,0.0,0.0,1.0));
   vColor = color;
   vPosition = rXPos;
   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 
-  gl_PointSize = size * ( 300.0 / -mvPosition.z );
+  gl_PointSize = size * ( 175.0 / -mvPosition.z );
 
   gl_Position = projectionMatrix * mvPosition;
 
@@ -275,7 +276,7 @@ function render() {
     // particleSystem.material.uniforms.rotationX.value += 0.001;
     const positions = geometry.attributes.position.array;
     const colors = geometry.attributes.color.array;
-
+    let pointColor = new THREE.Color();
     for (let i = 2; i < positions.length; i += 3) {
       if (i % density !== 0) {
                 positions[i] = 10000;
@@ -283,16 +284,16 @@ function render() {
             }
             let index = i * 4;
             let gray = (imageData.data[index] + imageData.data[index + 1] + imageData.data[index + 2]) / 3;
-            let threshold = 300;
+            let threshold = 500;
             if (gray < threshold) {
                 if (gray < threshold / 3) {
-                  positions[i] = gray * 0.05 * 5 + (r * 2);
+                  positions[i] = gray * 0.05 * 5 + (r * 3);
 
                 } else if (gray < threshold / 2) {
-                  positions[i] = gray * 0.05 * 5 + (g * 2);
+                  positions[i] = gray * 0.05 * 5 + (g * 3);
 
                 } else {
-                  positions[i] = gray * 0.05 * 5 + (b * 2);
+                  positions[i] = gray * 0.05 * 5 + (b * 3);
                 }
             } else {
               positions[i] = 10000;
@@ -300,9 +301,15 @@ function render() {
     }
 
     for (let j = 0; j < colors.length; j += 3) {
-      colors[j] = Math.random() * (b * 2);
-      colors[j + 1] = Math.random() * (b * 2);
-      colors[j + 2] = Math.random() * (g * 2);
+      pointColor.setHSL(0.5, g * 2, r);
+
+      // colors.push(pointColor.r, pointColor.g, pointColor.b);
+      // colors[j] = Math.random() * (b * 2);
+      // colors[j + 1] = Math.random() * (b * 2);
+      // colors[j + 2] = Math.random() * (g * 2);
+      colors[j] = pointColor.r;
+      colors[j + 1] = pointColor.g;
+      colors[j + 2] = pointColor.b;
     }
 
     geometry.attributes.position.needsUpdate = true;
