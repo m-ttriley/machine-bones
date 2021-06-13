@@ -1,7 +1,7 @@
 const path = require('path');
 const pkg = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const buildPath = './build/';
+const buildPath = './docs/';
 
 module.exports = {
   entry: ['./src/entry.js'],
@@ -22,7 +22,11 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg|tga|glb|babylon|mtl|pcb|pcd|prwm|obj|mat|mp3|ogg)$/i,
         use: 'file-loader',
         exclude: path.resolve(__dirname, './node_modules/')
-      }
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ]
   },
   plugins: [
