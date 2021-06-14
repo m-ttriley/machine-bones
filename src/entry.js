@@ -1,8 +1,12 @@
 import * as THREE from 'three';
-import css from './style.css';
+// import css from './style.css';
 import point from './textures/sprites/cogs.png';
-import songFile from './assets/MB.mp3';
-// require('./style.css');
+import songFile from './assets/MB.MP3';
+
+require('./style.css');
+
+let isMobile = window.innerWidth < 600;
+
 const vertexShader = `
 uniform float rotationX;
 
@@ -43,8 +47,8 @@ void main() {
 }
 `;
 
-const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
 
 const fftSize = 2048;
 const frequencyRange = {
@@ -55,11 +59,15 @@ const frequencyRange = {
   treble: [5200, 14000],
 };
 
-let renderer, scene, camera, video;
-let videoWidth, videoHeight, imageCache;
-let audioListener, audio, audioLoader, analyser;
+let renderer; let scene; let camera; let
+  video;
+let videoWidth; let videoHeight; let
+  imageCache;
+let audioListener; let audio; let audioLoader; let
+  analyser;
 
-let particleSystem, uniforms, geometry;
+let particleSystem; let uniforms; let
+  geometry;
 
 let particles = 0;
 
@@ -74,7 +82,7 @@ animate();
  * @param _frequencyRange
  * @returns {number} 0.0 ~ 1.0
  */
- function getFrequencyRangeValue (data, _frequencyRange) {
+function getFrequencyRangeValue(data, _frequencyRange) {
   const nyquist = 48000 / 2;
   const lowIndex = Math.round(_frequencyRange[0] / nyquist * data.length);
   const highIndex = Math.round(_frequencyRange[1] / nyquist * data.length);
@@ -82,11 +90,11 @@ animate();
   let numFrequencies = 0;
 
   for (let i = lowIndex; i <= highIndex; i++) {
-      total += data[i];
-      numFrequencies += 1;
+    total += data[i];
+    numFrequencies += 1;
   }
   return total / numFrequencies / 255;
-};
+}
 
 function getImageData(image, useCache) {
   if (useCache & imageCache) {
@@ -106,27 +114,27 @@ function getImageData(image, useCache) {
   imageCache = ctx.getImageData(0, 0, w, h);
 
   return imageCache;
-};
+}
 
 function initVideo() {
-  video = document.getElementById("video");
+  video = document.getElementById('video');
   if (!video) {
     video = document.createElement('video');
     video.id = 'video';
-    video.style = { display: 'none'};
+    video.style = { display: 'none' };
     video.class = 'hidden';
     video.autoplay = true;
   }
 
   const option = {
-    video: { facingMode: "user", frameRate: {ideal: 20, max: 30} },
+    video: { facingMode: 'user', frameRate: { ideal: isMobile ? 5 : 20, max: isMobile ? 10 : 30 } },
     audio: false,
   };
 
   navigator.mediaDevices.getUserMedia(option)
     .then((stream) => {
       video.srcObject = stream;
-      video.addEventListener("loadeddata", () => {
+      video.addEventListener('loadeddata', () => {
         videoWidth = video.videoWidth;
         videoHeight = video.videoHeight;
 
@@ -137,7 +145,7 @@ function initVideo() {
       console.log(error);
       showAlert();
     });
-};
+}
 
 function initAudio() {
   audioListener = new THREE.AudioListener();
@@ -152,13 +160,13 @@ function initAudio() {
 
   analyser = new THREE.AudioAnalyser(audio, fftSize);
 
-  document.body.addEventListener('click', function () {
+  document.body.addEventListener('click', () => {
     if (audio) {
-        if (audio.isPlaying) {
-            audio.pause();
-        } else {
-            audio.play();
-        }
+      if (audio.isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
     }
   });
 }
@@ -171,19 +179,18 @@ function init() {
 
   uniforms = {
     pointTexture: { value: new THREE.TextureLoader().load(point) },
-    rotationX:  { type: "f", value: 0.2 },
+    rotationX: { type: 'f', value: 0.2 },
   };
 
   const shaderMaterial = new THREE.ShaderMaterial({
-    uniforms: uniforms,
+    uniforms,
     vertexShader,
-		fragmentShader,
+    fragmentShader,
     blending: THREE.AdditiveBlending,
     depthTest: false,
     transparent: true,
-    vertexColors: true
+    vertexColors: true,
   });
-
 
   const radius = 200;
 
@@ -196,8 +203,8 @@ function init() {
   const color = new THREE.Color();
   const imageData = getImageData(video);
 
-  for ( let y = 0, height = imageData.height; y < height; y += 1) {
-    for (let x = 0, width = imageData.width; x < width; x += 1) {
+  for (let y = 0, { height } = imageData; y < height; y += 1) {
+    for (let x = 0, { width } = imageData; x < width; x += 1) {
       // const pixel = (x + y) * 3;
       positions.push(x - imageData.width / 2);
       positions.push(-y + imageData.height / 4);
@@ -224,39 +231,40 @@ function init() {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize((
+    isMobile ? window.innerWidth : 0.75 * window.innerWidth),
+  isMobile ? window.innerHeight : (0.75 * window.innerHeight));
 
   document.body.appendChild(renderer.domElement);
 
   //
 
   window.addEventListener('resize', onWindowResize);
-
 }
 
 function onWindowResize() {
-
+  isMobile = window.innerWidth < 600;
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
+  renderer.setSize((
+    isMobile ? window.innerWidth : 0.75 * window.innerWidth),
+  isMobile ? window.innerHeight : (0.75 * window.innerHeight));
 }
 
 function animate() {
-
   requestAnimationFrame(animate);
 
   render();
-
 }
 
 function render() {
   const time = Date.now() * 0.005;
   const density = 2;
-  const useCache = parseInt(time) % 2 === 0;  // To reduce CPU usage.
+  const useCache = parseInt(time, 10) % 2 === 0; // To reduce CPU usage.
   const imageData = getImageData(video, useCache);
-  let r, g, b;
+  let r; let g; let
+    b;
   if (analyser) {
     // analyser.getFrequencyData() would be an array with a size of half of fftSize.
     const data = analyser.getFrequencyData();
@@ -275,28 +283,26 @@ function render() {
     // particleSystem.material.uniforms.rotationX.value += 0.001;
     const positions = geometry.attributes.position.array;
     const colors = geometry.attributes.color.array;
-    let pointColor = new THREE.Color();
+    const pointColor = new THREE.Color();
     for (let i = 2; i < positions.length; i += 3) {
       if (i % density !== 0) {
-                positions[i] = 10000;
-                continue;
-            }
-            let index = i * 4;
-            let gray = (imageData.data[index] + imageData.data[index + 1] + imageData.data[index + 2]) / 3;
-            let threshold = 500;
-            if (gray < threshold) {
-                if (gray < threshold / 3) {
-                  positions[i] = gray * 0.05 * 5 + (r * 3);
-
-                } else if (gray < threshold / 2) {
-                  positions[i] = gray * 0.05 * 5 + (g * 3);
-
-                } else {
-                  positions[i] = gray * 0.05 * 5 + (b * 3);
-                }
-            } else {
-              positions[i] = 10000;
-            }
+        positions[i] = 10000;
+        continue;
+      }
+      const index = i * 4;
+      const gray = (imageData.data[index] + imageData.data[index + 1] + imageData.data[index + 2]) / 3;
+      const threshold = 500;
+      if (gray < threshold) {
+        if (gray < threshold / 3) {
+          positions[i] = gray * 0.05 * 5 + (r * 3);
+        } else if (gray < threshold / 2) {
+          positions[i] = gray * 0.05 * 5 + (g * 3);
+        } else {
+          positions[i] = gray * 0.05 * 5 + (b * 3);
+        }
+      } else {
+        positions[i] = 10000;
+      }
     }
 
     for (let j = 0; j < colors.length; j += 3) {
