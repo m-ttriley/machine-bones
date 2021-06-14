@@ -12,6 +12,9 @@ module.exports = {
   mode: 'development',
   target: 'web',
   devtool: 'source-map',
+  devServer: {
+    host: '0.0.0.0',
+  },
   module: {
     rules: [
       {

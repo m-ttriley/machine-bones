@@ -3,9 +3,7 @@ body {
     background-color: black;
 }
 
-@media screen and (min-width: 600px) {
-    canvas {
-        margin: auto;
-        padding-top: 65px;
-    }
-};
+canvas {
+    margin: auto;
+    padding-top: 65px;
+}

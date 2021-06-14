@@ -121,8 +121,7 @@ function initVideo() {
   if (!video) {
     video = document.createElement('video');
     video.id = 'video';
-    video.style = { display: 'none' };
-    video.class = 'hidden';
+    video.style = { display: 'hidden' };
     video.autoplay = true;
   }
 
@@ -231,9 +230,7 @@ function init() {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize((
-    isMobile ? window.innerWidth : 0.75 * window.innerWidth),
-  isMobile ? window.innerHeight : (0.75 * window.innerHeight));
+  renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
 
   document.body.appendChild(renderer.domElement);
 
@@ -247,9 +244,7 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize((
-    isMobile ? window.innerWidth : 0.75 * window.innerWidth),
-  isMobile ? window.innerHeight : (0.75 * window.innerHeight));
+  renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
 }
 
 function animate() {
