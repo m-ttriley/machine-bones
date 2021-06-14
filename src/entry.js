@@ -119,7 +119,7 @@ function initVideo() {
   }
 
   const option = {
-    video: true,
+    video: { facingMode: "user", frameRate: {ideal: 20, max: 30} },
     audio: false,
   };
 
@@ -148,7 +148,6 @@ function initAudio() {
     audio.setBuffer(buffer);
     audio.setLoop(true);
     audio.play();
-    audio.setVolume(0.2);
   });
 
   analyser = new THREE.AudioAnalyser(audio, fftSize);
