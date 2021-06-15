@@ -1,7 +1,8 @@
+/* eslint-disable import/no-unresolved */
 import * as THREE from 'three';
 // import css from './style.css';
 import point from './textures/sprites/cogs.png';
-import songFile from './assets/MB.MP3';
+import songFile from './assets/MB.mp3';
 
 require('./style.css');
 
