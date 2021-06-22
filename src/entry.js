@@ -225,7 +225,9 @@ function init() {
 
   scene.add(particleSystem);
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({
+    // preserveDrawingBuffer: true,
+  });
   renderer.setPixelRatio(window.devicePixelRatio);
   // renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
   renderer.setSize((window.innerWidth), (window.innerHeight));

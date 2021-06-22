@@ -33,6 +33,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({'title': 'three-seed project'})
+    new HtmlWebpackPlugin({
+      'title': 'M A C H I N E | B O N E S',
+      template: 'index.html',
+    })
   ]
 }
