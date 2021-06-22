@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import * as THREE from 'three';
-// import css from './style.css';
+import * as dat from 'dat.gui';
 import point from './textures/sprites/cogs.png';
 import songFile from './assets/MB.mp3';
 
@@ -121,13 +121,14 @@ function initVideo() {
   video = document.getElementById('video');
   if (!video) {
     video = document.createElement('video');
+    document.body.append(video);
     video.id = 'video';
-    video.style = { display: 'hidden' };
     video.autoplay = true;
+    video.playsInline = true;
   }
 
   const option = {
-    video: { facingMode: 'user', frameRate: { ideal: isMobile ? 5 : 20, max: isMobile ? 10 : 30 } },
+    video: true,
     audio: false,
   };
 
@@ -137,6 +138,9 @@ function initVideo() {
       video.addEventListener('loadeddata', () => {
         videoWidth = video.videoWidth;
         videoHeight = video.videoHeight;
+        const container = document.createElement('div');
+        container.className = 'container';
+        document.body.append(container);
 
         init();
       });
@@ -159,22 +163,14 @@ function initAudio() {
   });
 
   analyser = new THREE.AudioAnalyser(audio, fftSize);
-
-  document.body.addEventListener('click', () => {
-    if (audio) {
-      if (audio.isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-    }
-  });
 }
 
 function init() {
   camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.z = 100;
+  camera.position.z = 156;
 
+  // let gui = new dat.GUI();
+  // gui.add(camera.position, "z", 0, 500);
   scene = new THREE.Scene();
 
   uniforms = {
@@ -188,7 +184,7 @@ function init() {
     fragmentShader,
     blending: THREE.AdditiveBlending,
     depthTest: false,
-    transparent: true,
+    transparent: false,
     vertexColors: true,
   });
 
@@ -231,9 +227,19 @@ function init() {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
+  // renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
+  renderer.setSize((window.innerWidth), (window.innerHeight));
 
   document.body.appendChild(renderer.domElement);
+  document.querySelector('canvas').addEventListener('click', () => {
+    if (audio) {
+      if (audio.isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+    }
+  });
 
   //
 
@@ -245,7 +251,8 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
+  // renderer.setSize((0.75 * window.innerWidth), (0.75 * window.innerHeight));
+  renderer.setSize((window.innerWidth), (window.innerHeight));
 }
 
 function animate() {
@@ -302,15 +309,16 @@ function render() {
     }
 
     for (let j = 0; j < colors.length; j += 3) {
-      pointColor.setHSL(0.5, g * 2, r);
+      pointColor.setHSL(r, g * 2, b + 0.25);
+      colors[j] = pointColor.r;
+      colors[j + 1] = pointColor.g;
+      colors[j + 2] = pointColor.b;
 
       // colors.push(pointColor.r, pointColor.g, pointColor.b);
       // colors[j] = Math.random() * (b * 2);
       // colors[j + 1] = Math.random() * (b * 2);
       // colors[j + 2] = Math.random() * (g * 2);
-      colors[j] = pointColor.r;
-      colors[j + 1] = pointColor.g;
-      colors[j + 2] = pointColor.b;
+      
     }
 
     geometry.attributes.position.needsUpdate = true;

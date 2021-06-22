@@ -3,7 +3,21 @@ body {
     background-color: black;
 }
 
+video {
+    position: absolute;
+    z-index: -2;
+}
+
+.container {
+    position: absolute;
+    background: black;
+    z-index: -1;
+    height: 1000px;
+    width: 1000px;
+}
+
 canvas {
+    z-index: 2;
     margin: auto;
-    padding-top: 65px;
+    /* padding-top: 65px; */
 }
