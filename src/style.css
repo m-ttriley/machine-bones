@@ -46,32 +46,34 @@ canvas {
     height: 100%;
 }
 
-.webcam-warning {
+.warnings {
     position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+.webcam-warning {
     color: white;
     font: 13px Helvetica, Sans-Serif;
     border: 1px dashed white;
     border-radius: 4px;
     padding: 24px;
-    top: 40px;
-    left: 40px;
     background-color: black;
     opacity: 1;
     transition: opacity 1s ease;
 }
 
 .audio-warning {
-    position: absolute;
     color: white;
     font: 13px Helvetica, Sans-Serif;
     border: 1px dashed white;
     border-radius: 4px;
     padding: 24px;
-    top: 40px;
-    right: 40px;
     background-color: black;
     opacity: 1;
     transition: opacity 1s ease;
+    margin-bottom: 15px;
+    display: inline-block;
 }
 
 @media (max-width: 768px) {
@@ -86,16 +88,17 @@ canvas {
     }
 
     .webcam-warning {
-        font-size: 8px;
-        padding: 8px;
-        left: 0px;
-        top: 10px;
+        font-size: 12px;
+        padding: 12px;
     }
 
     .audio-warning {
-        font-size: 8px;
-        padding: 8px;
-        right: 0px;
-        top: 10px;
+        font-size: 12px;
+        padding: 12px;
+    }
+
+    .warnings {
+        top: 25px;
+        left: 25px;
     }
 }
