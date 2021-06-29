@@ -46,6 +46,34 @@ canvas {
     height: 100%;
 }
 
+.webcam-warning {
+    position: absolute;
+    color: white;
+    font: 13px Helvetica, Sans-Serif;
+    border: 1px dashed white;
+    border-radius: 4px;
+    padding: 24px;
+    top: 40px;
+    left: 40px;
+    background-color: black;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+.audio-warning {
+    position: absolute;
+    color: white;
+    font: 13px Helvetica, Sans-Serif;
+    border: 1px dashed white;
+    border-radius: 4px;
+    padding: 24px;
+    top: 40px;
+    right: 40px;
+    background-color: black;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
 @media (max-width: 768px) {
     .text-container {
         font-size: 24px;
@@ -55,5 +83,19 @@ canvas {
         height: 100px;
         width: 100px;
         right: 10px;
+    }
+
+    .webcam-warning {
+        font-size: 8px;
+        padding: 8px;
+        left: 0px;
+        top: 10px;
+    }
+
+    .audio-warning {
+        font-size: 8px;
+        padding: 8px;
+        right: 0px;
+        top: 10px;
     }
 }

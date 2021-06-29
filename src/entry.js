@@ -7,7 +7,7 @@ import songFile from './assets/MB.mp3';
 require('./style.css');
 
 let isMobile = window.innerWidth < 600;
-
+const audioWarning = document.querySelector('.audio-warning');
 const vertexShader = `
 uniform float rotationX;
 
@@ -141,7 +141,8 @@ function initVideo() {
         const container = document.createElement('div');
         container.className = 'container';
         document.body.append(container);
-
+        const warning = document.querySelector('.webcam-warning');
+        warning.style.opacity = 0;
         init();
       });
     })
@@ -159,7 +160,6 @@ function initAudio() {
   audioLoader.load(songFile, (buffer) => {
     audio.setBuffer(buffer);
     audio.setLoop(true);
-    audio.play();
   });
 
   analyser = new THREE.AudioAnalyser(audio, fftSize);
@@ -264,6 +264,11 @@ function animate() {
 }
 
 function render() {
+  if (audio && !audio.isPlaying) {
+    audioWarning.style.opacity = 1;
+  } else if (audio && audio.isPlaying) {
+    audioWarning.style.opacity = 0;
+  }
   const time = Date.now() * 0.005;
   const density = 2;
   const useCache = parseInt(time, 10) % 2 === 0; // To reduce CPU usage.
