@@ -98,7 +98,7 @@ function getFrequencyRangeValue(data, _frequencyRange) {
 }
 
 function getImageData(image, useCache) {
-  if (useCache & imageCache) {
+  if (useCache && imageCache) {
     return imageCache;
   }
 
@@ -158,6 +158,8 @@ function initAudio() {
   audioLoader = new THREE.AudioLoader();
 
   audioLoader.load(songFile, (buffer) => {
+    const loadingDiv = document.querySelector('.loading');
+    loadingDiv.style.opacity = 0;
     audio.setBuffer(buffer);
     audio.setLoop(true);
   });
@@ -233,7 +235,7 @@ function init() {
   renderer.setSize((window.innerWidth), (window.innerHeight));
 
   document.body.appendChild(renderer.domElement);
-  document.querySelector('canvas').addEventListener('click', () => {
+  document.querySelector('.loading').addEventListener('click', () => {
     if (audio) {
       if (audio.isPlaying) {
         audio.pause();
