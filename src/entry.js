@@ -325,7 +325,6 @@ function render() {
       // colors[j] = Math.random() * (b * 2);
       // colors[j + 1] = Math.random() * (b * 2);
       // colors[j + 2] = Math.random() * (g * 2);
-      
     }
 
     geometry.attributes.position.needsUpdate = true;
