@@ -98,9 +98,9 @@ function getFrequencyRangeValue(data, _frequencyRange) {
 }
 
 function getImageData(image, useCache) {
-  if (useCache && imageCache) {
-    return imageCache;
-  }
+  // if (useCache && imageCache) {
+  //   return imageCache;
+  // }
 
   const w = image.videoWidth;
   const h = image.videoHeight;
